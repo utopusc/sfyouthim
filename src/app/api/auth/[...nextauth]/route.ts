@@ -1,0 +1,1 @@
+// Remove this file entirely if Firebase is your only auth solution.
