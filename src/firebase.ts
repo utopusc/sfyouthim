@@ -1,6 +1,6 @@
 "use client";
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, PhoneAuthProvider, OAuthProvider } from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -13,18 +13,20 @@ const firebaseConfig = {
   measurementId: "G-E0DECXCX6Y"
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// Initialize Firebase only if it hasn't been initialized
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+const auth = getAuth(app);
 
-// Avoid SSR issues
-isSupported().then(async (supported) => {
-  if (supported) {
-    const analyticsModule = await import("firebase/analytics");
-    analyticsModule.getAnalytics(app);
-  }
-});
+// Analytics setup with SSR check
+if (typeof window !== "undefined") {
+  isSupported().then(async (supported) => {
+    if (supported) {
+      const analyticsModule = await import("firebase/analytics");
+      analyticsModule.getAnalytics(app);
+    }
+  });
+}
 
-// Export providers for usage in sign-in
+export { auth, app };
 export const googleProvider = new GoogleAuthProvider();
 export const appleProvider = new OAuthProvider("apple.com");
-export const phoneProvider = new PhoneAuthProvider(auth);

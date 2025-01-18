@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // next/router yerine next/navigation
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,44 +16,43 @@ import { Label } from "@/components/ui/label";
 import { auth, googleProvider, appleProvider } from "@/firebase";
 import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 
-function handleGoogleSignUp() {
-  const router = useRouter();
-  signInWithPopup(auth, googleProvider)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
-function handleAppleSignUp() {
-  const router = useRouter();
-  signInWithPopup(auth, appleProvider)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
-function handleEmailSignUp(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  const router = useRouter();
-  const formData = new FormData(e.currentTarget);
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
 export default function SignUpForm() {
+  const router = useRouter();
+  const [error, setError] = useState<string>("");
+
+  const handleGoogleSignUp = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Google sign up failed. Please try again.");
+    }
+  };
+
+  const handleAppleSignUp = async () => {
+    try {
+      await signInWithPopup(auth, appleProvider);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Apple sign up failed. Please try again.");
+    }
+  };
+
+  const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        formData.get("email") as string,
+        formData.get("password") as string
+      );
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Sign up failed. Please try again.");
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -62,6 +62,7 @@ export default function SignUpForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleEmailSignUp} className="grid gap-4">
           {/* OAuth signup buttons */}
           <Button variant="outline" className="w-full" onClick={handleGoogleSignUp}>

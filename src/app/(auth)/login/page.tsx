@@ -1,6 +1,7 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // next/router yerine next/navigation
 import { auth, googleProvider, appleProvider } from "@/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
@@ -16,44 +17,43 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-function handleGoogleLogin() {
-  const router = useRouter();
-  signInWithPopup(auth, googleProvider)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
-function handleAppleLogin() {
-  const router = useRouter();
-  signInWithPopup(auth, appleProvider)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
-function handleEmailLogin(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  const router = useRouter();
-  const formData = new FormData(e.currentTarget);
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      router.push("/dashboard");
-    })
-    .catch((err) => {
-      // handle error
-    });
-}
-
 export default function LoginForm() {
+  const router = useRouter();
+  const [error, setError] = useState<string>("");
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Google login failed. Please try again.");
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      await signInWithPopup(auth, appleProvider);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Apple login failed. Please try again.");
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        formData.get("email") as string,
+        formData.get("password") as string
+      );
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Invalid email or password.");
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -63,6 +63,7 @@ export default function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleEmailLogin} className="grid gap-4">
           <Button onClick={handleGoogleLogin} className="w-full">
             Login with Google
