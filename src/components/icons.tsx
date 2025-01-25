@@ -147,11 +147,11 @@ export const Icons = {
     </svg>
   ),
   home: (props: React.SVGProps<SVGSVGElement>) => <Home {...props} />,
-  users: (props) => <Users {...props} />, 
-  settings: (props) => <Settings {...props} />,
-  help: (props) => <HelpCircle {...props} />,
-  menu: (props) => <Menu {...props} />,
-  dollar: (props) => <DollarSign {...props} />,
-  folder: (props) => <Folder {...props} />,
-  chart: (props) => <BarChart {...props} />
+  users: (props: React.SVGProps<SVGSVGElement>) => <Users {...props} />,
+  settings: (props: React.SVGProps<SVGSVGElement>) => <Settings {...props} />,
+  help: (props: React.SVGProps<SVGSVGElement>) => <HelpCircle {...props} />,
+  menu: (props: React.SVGProps<SVGSVGElement>) => <Menu {...props} />,
+  dollar: (props: React.SVGProps<SVGSVGElement>) => <DollarSign {...props} />,
+  folder: (props: React.SVGProps<SVGSVGElement>) => <Folder {...props} />,
+  chart: (props: React.SVGProps<SVGSVGElement>) => <BarChart {...props} />
 };
