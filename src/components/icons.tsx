@@ -146,7 +146,7 @@ export const Icons = {
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   ),
-  home: (props) => <Home {...props} />,
+  home: (props: React.SVGProps<SVGSVGElement>) => <Home {...props} />,
   users: (props) => <Users {...props} />, 
   settings: (props) => <Settings {...props} />,
   help: (props) => <HelpCircle {...props} />,
