@@ -1,5 +1,16 @@
 type IconProps = React.HTMLAttributes<SVGElement>;
 
+import {
+  Home,
+  Users,
+  Settings,
+  HelpCircle,
+  Menu,
+  DollarSign,
+  Folder,
+  BarChart,
+} from "lucide-react"
+
 export const Icons = {
   logo: (props: IconProps) => (
     <svg
@@ -135,4 +146,12 @@ export const Icons = {
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   ),
+  home: (props) => <Home {...props} />,
+  users: (props) => <Users {...props} />, 
+  settings: (props) => <Settings {...props} />,
+  help: (props) => <HelpCircle {...props} />,
+  menu: (props) => <Menu {...props} />,
+  dollar: (props) => <DollarSign {...props} />,
+  folder: (props) => <Folder {...props} />,
+  chart: (props) => <BarChart {...props} />
 };

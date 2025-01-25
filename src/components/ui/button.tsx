@@ -21,6 +21,7 @@ const buttonVariants = cva(
 
         orange:
         "border border-input  hover:bg-accent hover:text-accent-foreground",
+        modern: "bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white shadow-md hover:opacity-90",
       },
       size: {
         default: "h-10 px-4 py-2",

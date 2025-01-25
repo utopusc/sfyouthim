@@ -28,7 +28,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "min-h-screen bg-background antialiased w-full mx-auto scroll-smooth"
+          "min-h-screen bg-background/80 backdrop-blur-sm antialiased w-full mx-auto scroll-smooth"
         )}
       >
         <ThemeProvider
@@ -36,7 +36,9 @@ export default function RootLayout({
           defaultTheme="light"
           enableSystem={false}
         >
-          {children}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
           <ThemeToggle />
           <TailwindIndicator />
         </ThemeProvider>
